@@ -1,37 +1,50 @@
 cmake_minimum_required(VERSION 3.5.0)
+include(CMakePrintHelpers)
+
 project(kalman-filter-proj VERSION 0.1.0 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 17)
 
 include(CTest)
 enable_testing()
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+# set(CMAKE_VERBOSE_MAKEFILE on)
 
-set(Boost_USE_STATIC_LIBS OFF) 
-set(Boost_USE_MULTITHREADED ON)  
-set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost REQUIRED)
+set(SOURCES
+    src/main.cpp
+)
 
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS}) 
+find_package(Eigen3 3.1.2)
 
-    set(SOURCES
-        src/main.cpp
-    )
+if (EIGEN3_FOUND) 
     add_executable(${PROJECT_NAME} ${SOURCES})
 
     target_include_directories(${PROJECT_NAME}
         PRIVATE
             ${PROJECT_SOURCE_DIR}/inc
+            ${EIGEN3_INCLUDE_DIRS}
     )   
-    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_compile_options(my_executable PRIVATE -Wno-deprecated-declarations)
+    endif()
+    # cmake_print_variables(CMAKE_C_COMPILER CMAKE_MAJOR_VERSION DOES_NOT_EXIST)
+    cmake_print_variables(EIGEN3_INCLUDE_DIRS)
+
 endif()
 
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(my_executable PRIVATE -Wno-deprecated-declarations)
-endif()
+
+
  
 
