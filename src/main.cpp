@@ -12,20 +12,29 @@
 #include "lorenz_solver.hpp"
 #include "lorenz_solver.cpp" // Included to avoid templating issues
 
-int main(int argc, const char *argv[])
+// Previously used to test Lorenz Model Outputs
+void testLorenzModel()
 {
-    LorenzSolver::params<const double, double> params{
-        (const double)0.01, // timeResolution
-        (double)3.0,        // lowerBoundaryTemp
-        (double)0.001,      // thermalConductivity
-        (double)0.001,      // fluidVel
-        (double)1.0,        // initX
-        (double)1.0,        // initY
-        (double)1.0,        // initZ
-    };
+    LorenzSolver::params<double> params;
 
-    LorenzSolver::Model<const double, double> x(params);
-    x.solveSystem();
-    x.outputToCSV("test.csv");
+    // Lorenz Parameters
+    params.timeResolution = 0.01;
+    params.beta = 2.66;
+    params.sigma = 10.0;
+    params.rho = 28.0;
+
+    // Model Initial Conditions
+    params.initX = 1.0;
+    params.initY = 1.0;
+    params.initZ = 1.0;
+
+    LorenzSolver::Model<const double, double> singleModel(params);
+    singleModel.solveSystem();
+    singleModel.outputToCSV("test.csv");
+}
+
+int main()
+{
+    testLorenzModel();
     return 0;
 }

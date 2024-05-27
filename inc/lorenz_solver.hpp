@@ -18,37 +18,30 @@
 
 namespace LorenzSolver
 {
-    template <typename UConst, typename VMut>
+    template <typename VMut>
     struct params
     {
-        UConst timeResolution;
-        VMut lowerBoundaryTemp;
-        VMut thermalConductivity;
-        VMut fluidVel;
+        VMut timeResolution;
+        VMut rho;
+        VMut sigma;
+        VMut beta;
         VMut initX;
         VMut initY;
         VMut initZ;
-    };
-
-    enum DerivativeVariable
-    {
-        IsX,
-        IsY,
-        IsZ
     };
 
     template <typename UConst, typename VMut>
     class Model
     {
     public:
-        Model(params<UConst, VMut> modelParams);
+        Model(params<VMut> modelParams);
         void editParams();
         void solveSystem();
         void outputToCSV(std::string fname);
         Eigen::Matrix<VMut, Eigen::Dynamic, Eigen::Dynamic> data;
-        VMut domainAspectRatio;
-        VMut rayleighNum;
-        VMut prandtlNum;
+        VMut beta;
+        VMut rho;
+        VMut sigma;
         VMut dt;
 
     private:

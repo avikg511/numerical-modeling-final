@@ -10,12 +10,12 @@
 using namespace LorenzSolver;
 
 template <typename UConst, typename VMut>
-Model<UConst, VMut>::Model(LorenzSolver::params<UConst, VMut> modelParams)
+Model<UConst, VMut>::Model(LorenzSolver::params<VMut> modelParams)
 {
     // Calculate params properly later, now just random values
-    this->prandtlNum = 10.0;
-    this->rayleighNum = 28.0;
-    this->domainAspectRatio = 2.66;
+    this->sigma = modelParams.sigma;
+    this->rho = modelParams.rho;
+    this->beta = modelParams.beta;
 
     this->dt = modelParams.timeResolution;
 
@@ -41,13 +41,15 @@ void Model<UConst, VMut>::solveSystem()
             \frac{dy}{dt} = \rho x  - y - xz \\
             \frac{dz}{dt} = -\beta z + xy \\
 
-            where \sigma = this->prandtlNum,
-                  \rho   = this->rayleighNum,
-                  \beta  = this->domainAspectRatio
+            where \sigma = this->sigma,
+                  \rho   = this->rho,
+                  \beta  = this->beta
 
-        The variables/derivation is from this writeup: https://hyemingu.github.io/assets/pdf/Project_Paper___Applied_Math_Modeling.pdf
+        The variables/derivation is from this writeup:
+            https://hyemingu.github.io/assets/pdf/Project_Paper___Applied_Math_Modeling.pdf,
+            but this class is independent of the physical attributes.
 
-        For the ODEs themselves, I'm using RK4.
+        For the ODEs themselves, I'm using RK4 in a sepatate function.
     */
 
     Eigen::RowVector3<VMut> scratch;
@@ -56,12 +58,12 @@ void Model<UConst, VMut>::solveSystem()
 
     for (int count = 1; count < data.rows(); count++)
     {
-        //         Model output
+        // Model output
         prevRow = ((this->data).leftCols(3)).row(count - 1);
         RK4(prevRow, derivs, scratch);
         (this->data).leftCols(3).row(count) = prevRow + derivs;
 
-        //        Center of Masses
+        // Center of Masses
         (this->data)(count, 3) = (this->data).col(0).sum() / (count + 1);
         (this->data)(count, 4) = (this->data).col(1).sum() / (count + 1);
         (this->data)(count, 5) = (this->data).col(2).sum() / (count + 1);
@@ -110,9 +112,9 @@ void Model<UConst, VMut>::lorenzDerivatives(Eigen::RowVector3<VMut> &prevRow, Ei
     VMut y = prevRow[1];
     VMut z = prevRow[2];
 
-    derivsRet[0] = (y - x) * this->prandtlNum;
-    derivsRet[1] = x * (this->rayleighNum - z) - y;
-    derivsRet[2] = x * y - this->domainAspectRatio * z;
+    derivsRet[0] = (y - x) * this->sigma;
+    derivsRet[1] = x * (this->rho - z) - y;
+    derivsRet[2] = x * y - this->beta * z;
 }
 
 template <typename UConst, typename VMut>
