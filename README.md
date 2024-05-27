@@ -6,7 +6,7 @@ This code base is for my numerical modeling final. The current plan is to work w
 Currently, we just have the Lorenz Model as shown above in the gif.
 
 Current directory: 
-
+```
 .
 ├── .gitignore
 ├── .vscode
@@ -26,5 +26,5 @@ Current directory:
     └── main.cpp
 
 4 directories, 13 files
-
+```
 Note: ./build.sh must be given run permissions with `chmod +x ./build.sh` before running it. The CMakeLists.txt was copied from a previous project so will be updated as we move and update dependencies.
