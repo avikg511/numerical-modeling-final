@@ -7,16 +7,24 @@ Currently, we just have the Lorenz Model as shown above in the gif.
 
 Current directory: 
 
-```
 .
+├── .gitignore
+├── .vscode
+│   ├── c_cpp_properties.json
+│   ├── settings.json
+│   └── tasks.json
 ├── CMakeLists.txt
 ├── README.md
 ├── build.sh
 ├── inc
+│   ├── lorenz_ensemble.hpp
+│   └── lorenz_solver.hpp
+├── lorenzplot.gnu
 └── src
+    ├── lorenz_ensemble.cpp
+    ├── lorenz_solver.cpp
     └── main.cpp
 
-3 directories, 4 files
-```
+4 directories, 13 files
 
 Note: ./build.sh must be given run permissions with `chmod +x ./build.sh` before running it. The CMakeLists.txt was copied from a previous project so will be updated as we move and update dependencies.
