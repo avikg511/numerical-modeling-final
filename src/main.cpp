@@ -6,11 +6,10 @@
 //
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <fstream>
 #include "lorenz_solver.hpp"
 #include "lorenz_solver.cpp" // Included to avoid templating issues
+// #include "lorenz_ensemble.hpp"
+// #include "lorenz_ensemble.cpp"
 
 // Previously used to test Lorenz Model Outputs
 void testLorenzModel()
@@ -19,7 +18,8 @@ void testLorenzModel()
 
     // Lorenz Parameters
     params.timeResolution = 0.01;
-    params.beta = 2.66;
+    // params.beta = 2.66;
+    params.beta = 12;
     params.sigma = 10.0;
     params.rho = 28.0;
 
@@ -28,13 +28,15 @@ void testLorenzModel()
     params.initY = 1.0;
     params.initZ = 1.0;
 
-    LorenzSolver::Model<const double, double> singleModel(params);
+    LorenzSolver::Model<double> singleModel(params);
     singleModel.solveSystem();
-    singleModel.outputToCSV("test.csv");
+    singleModel.outputToCSV("test1.csv");
 }
 
 int main()
 {
     testLorenzModel();
+    // int numModels = 5;
+    // LorenzManager::LorenzEnsemble<double> model(numModels);
     return 0;
 }

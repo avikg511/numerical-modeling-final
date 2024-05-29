@@ -22,15 +22,11 @@ namespace LorenzSolver
     struct params
     {
         VMut timeResolution;
-        VMut rho;
-        VMut sigma;
-        VMut beta;
-        VMut initX;
-        VMut initY;
-        VMut initZ;
+        VMut rho, sigma, beta;
+        VMut initX, initY, initZ;
     };
 
-    template <typename UConst, typename VMut>
+    template <typename VMut>
     class Model
     {
     public:
@@ -39,9 +35,7 @@ namespace LorenzSolver
         void solveSystem();
         void outputToCSV(std::string fname);
         Eigen::Matrix<VMut, Eigen::Dynamic, Eigen::Dynamic> data;
-        VMut beta;
-        VMut rho;
-        VMut sigma;
+        VMut beta, rho, sigma;
         VMut dt;
 
     private:

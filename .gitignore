@@ -1,4 +1,6 @@
 /build
 /out
 /data
-.vscode
+./vscode
+/writeup
+.DS_Store

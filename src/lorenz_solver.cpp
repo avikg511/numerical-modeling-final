@@ -9,8 +9,8 @@
 
 using namespace LorenzSolver;
 
-template <typename UConst, typename VMut>
-Model<UConst, VMut>::Model(LorenzSolver::params<VMut> modelParams)
+template <typename VMut>
+Model<VMut>::Model(LorenzSolver::params<VMut> modelParams)
 {
     // Calculate params properly later, now just random values
     this->sigma = modelParams.sigma;
@@ -32,8 +32,8 @@ Model<UConst, VMut>::Model(LorenzSolver::params<VMut> modelParams)
     this->data(0, 5) = modelParams.initZ;
 }
 
-template <typename UConst, typename VMut>
-void Model<UConst, VMut>::solveSystem()
+template <typename VMut>
+void Model<VMut>::solveSystem()
 {
     /*
         The 3 equations to solve are:
@@ -70,8 +70,8 @@ void Model<UConst, VMut>::solveSystem()
     }
 }
 
-template <typename UConst, typename VMut>
-void Model<UConst, VMut>::RK4(Eigen::RowVector3<VMut> &prevRow, Eigen::RowVector3<VMut> &derivs, Eigen::RowVector3<VMut> &scratch)
+template <typename VMut>
+void Model<VMut>::RK4(Eigen::RowVector3<VMut> &prevRow, Eigen::RowVector3<VMut> &derivs, Eigen::RowVector3<VMut> &scratch)
 {
     /*
      Let r \in {x, y, z}. Let's also consider f(rVal) = \frac{dr}{dt} @ r = rVal. (Evaluate derivative at rVal).
@@ -105,8 +105,8 @@ void Model<UConst, VMut>::RK4(Eigen::RowVector3<VMut> &prevRow, Eigen::RowVector
     derivs = this->dt * (initDerivs + 2 * testADerivs + 2 * testBDerivs + testFinalDerivs) / 6.0;
 }
 
-template <typename UConst, typename VMut>
-void Model<UConst, VMut>::lorenzDerivatives(Eigen::RowVector3<VMut> &prevRow, Eigen::RowVector3<VMut> &derivsRet)
+template <typename VMut>
+void Model<VMut>::lorenzDerivatives(Eigen::RowVector3<VMut> &prevRow, Eigen::RowVector3<VMut> &derivsRet)
 {
     VMut x = prevRow[0];
     VMut y = prevRow[1];
@@ -117,8 +117,8 @@ void Model<UConst, VMut>::lorenzDerivatives(Eigen::RowVector3<VMut> &prevRow, Ei
     derivsRet[2] = x * y - this->beta * z;
 }
 
-template <typename UConst, typename VMut>
-void Model<UConst, VMut>::outputToCSV(std::string fname)
+template <typename VMut>
+void Model<VMut>::outputToCSV(std::string fname)
 {
     const static Eigen::IOFormat CSVFormat(Eigen::StreamPrecision, Eigen::DontAlignCols, ", ", "\n");
 

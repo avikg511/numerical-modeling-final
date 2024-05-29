@@ -13,6 +13,9 @@
 #include <Eigen/Core>
 #include <fstream>
 #include "lorenz_solver.hpp"
+#include <sstream>
+#include <string>
+#include <random>
 
 /*
     Class manages multiple sets of Lorenz Models, each with slight variations in say parameters, initial conditions,
@@ -24,10 +27,10 @@
 
 namespace LorenzManager
 {
-    template <typename UConst, typename VMut>
-    struct params
+    template <typename VMut>
+    struct physicalParams
     {
-        UConst timeResolution;
+        VMut timeResolution;
         VMut lowerBoundaryTemp;
         VMut thermalConductivity;
         VMut fluidVel;
@@ -40,11 +43,15 @@ namespace LorenzManager
     class LorenzEnsemble
     {
     public:
-        LorenzEnsemble();
-        std::vector<Eigen::Matrix<VMut, Eigen::Dynamic, Eigen::Dynamic> &> models;
-        void errorTimeseries(Eigen::Matrix<VMut, Eigen::Dynamic, 2> &errorSeries, LorenzSolver::Model &model1,
-                             LorenzSolver::Model &model2);
-        void compareModels(LorenzSolver::Model &model1, LorenzSolver::Model &model2);
+        LorenzEnsemble(int numModels);
+        LorenzEnsemble(physicalParams<VMut> params1, physicalParams<VMut> params2);
+        // std::vector<Eigen::Matrix<VMut, Eigen::Dynamic, Eigen::Dynamic> &> models;
+        void errorTimeseries(Eigen::Matrix<VMut, Eigen::Dynamic, 2> &errorSeries, LorenzSolver::Model<VMut> &model1,
+                             LorenzSolver::Model<VMut> &model2);
+        void compareModels(LorenzSolver::Model<VMut> &model1, LorenzSolver::Model<VMut> &model2);
+        void outputScripts(bool showCenterOfMass, bool showAnimationNoSave, int numTimeSteps);
+
+        std::vector<std::string> filepaths;
     };
 };
 #endif /* lorenz_ensemble_hpp */
